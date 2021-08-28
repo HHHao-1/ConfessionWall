@@ -10,6 +10,7 @@ public class SafeException extends BaseException {
   }
   
   public static SafeException SESSION_ERROR = new SafeException(500210, "Session不存在或者已经失效");
+  public static SafeException USER_INPUT_ERROR = new SafeException(400, "您输入的数据格式错误或您没有权限访问资源！");
   public static SafeException PASSWORD_EMPTY = new SafeException(500211, "登录密码不能为空");
   public static SafeException MOBILE_EMPTY = new SafeException(500212, "手机号不能为空");
   public static SafeException MOBILE_ERROR = new SafeException(500213, "手机号格式错误");

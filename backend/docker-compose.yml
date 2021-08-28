@@ -1,0 +1,141 @@
+version: '3'
+# 关于网络,如果用到mysql或者redis，并且希望在同一个网络，那么就可以直接使用同一个网络名
+# docker network create project-demo_bridge
+networks:
+  wx_wall:
+    driver: bridge
+
+services:
+  redis:
+    image: redis
+    container_name: redis
+    restart: always
+    hostname: redis
+    volumes:
+      - /Users/hao/服务器/wxwall/data:/data/wxwall
+      - /Users/hao/服务器/wxwall/data/redis.conf:/usr/local/etc/redis/redis.conf
+      # - /Users/hao/服务器/wxwall/data/redis.conf:/usr/local/etc/redis/redis.conf
+      # - /Users/hao/服务器/wxwall/data/redis_logs:/logs
+    command:
+      redis-server /usr/local/etc/redis/redis.conf
+      # 两个写入操作 只是为了解决启动后警告 可以去掉
+      # /bin/bash -c "echo 511 > /proc/sys/net/core/somaxconn
+      # && echo never > /sys/kernel/mm/transparent_hugepage/enabled
+      # && redis-server /usr/local/etc/redis/redis.conf"
+    ports:
+      - 880:6379
+    networks:
+      - wx_wall
+  rabbitmq:
+    image: rabbitmq
+    container_name: rabbitmq
+    restart: always
+    hostname: rabbitmq
+    volumes:
+      - /Users/hao/服务器/wxwall/data:/data/wxwall
+      # - ./data:/var/lib/rabbitmq
+      # - ./config/rabbitmq.sh:/etc/rabbitmq/rabbitmq.sh
+      # - /etc/hosts:/etc/hosts
+    environment:
+      - RABBITMQ_DEFAULT_USER=root
+      - RABBITMQ_DEFAULT_PASS=root
+      # - RABBITMQ_DEFAULT_VHOST=root
+    ports:
+      - 15672:15672 
+      - 881:5672
+    # command: 
+    #   cd /etc/rabbitmq/conf.d/ && echo management_agent.disable_metrics_collector = false > management_agent.disable_metrics_collector.conf
+    networks:
+      - wx_wall
+  mysql:
+    image: mysql:5.7
+    container_name: mysql
+    restart: always
+    hostname: mysql
+    volumes:
+      - /Users/hao/服务器/wxwall/data:/data/wxwall
+    #   - ./mydir:/mydir
+    #   - ./datadir:/var/lib/mysql
+    #   - ./conf/my.cnf:/etc/my.cnf
+    #   # 数据库还原目录 可将需要还原的sql文件放在这里
+    #   - /docker/mysql/source:/docker-entrypoint-initdb.d
+    environment:
+      - MYSQL_USER=hao # 创建新用户
+      - MYSQL_PASSWORD=hao # 新用户的密码
+      - MYSQL_ROOT_PASSWORD=root
+      - TZ=Asia/Shanghai
+    # command:
+    # MySQL8的密码验证方式默认是 caching_sha2_password，但是很多的连接工具还不支持该方式
+    # 就需要手动设置下mysql的密码认证方式为以前的 mysql_native_password 方式
+    # --default-authentication-plugin=mysql_native_password
+    # --character-set-server=utf8mb4
+    # --collation-server=utf8mb4_general_ci
+    ports:
+      - 882:3306
+    networks:
+      - wx_wall
+  server.wall:
+    image: openjdk:8
+    container_name: server_wall
+    restart: always
+    hostname: wall
+    volumes: 
+      - /Users/hao/服务器/wxwall/data:/data/wxwall
+    # environment:
+    #   - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+    ports:
+      - 883:8080
+    # command: 
+    #   nohup java -jar /var/server/org1/wall-0.0.1-SNAPSHOT.jar &
+    depends_on:
+      - redis
+      - rabbitmq
+      - mysql
+    networks:
+      - wx_wall
+    stdin_open: true
+    tty: true
+  server.image:
+    image: openjdk:8
+    container_name: server_image
+    restart: always
+    hostname: image
+    volumes: 
+      - /Users/hao/服务器/wxwall/data:/data/wxwall
+    # environment:
+    #   - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+    ports:
+      - 884:8080
+    # command: 
+    #   nohup java -jar /var/server/org1/image-0.0.1-SNAPSHOT.jar &
+    depends_on:
+      - redis
+      - rabbitmq
+      - mysql
+    networks:
+      - wx_wall
+    stdin_open: true
+    tty: true
+  server.seckill:
+    image: openjdk:8
+    container_name: server_seckill
+    restart: always
+    hostname: seckill
+    volumes: 
+      - /Users/hao/服务器/wxwall/data:/data/wxwall
+    # environment:
+    #   - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+    ports:
+      - 885:8080
+    # command: 
+    #   nohup java -jar /var/server/org1/seckill-0.0.1-SNAPSHOT.jar &
+    depends_on:
+      - redis
+      - rabbitmq
+      - mysql
+    networks:
+      - wx_wall
+    stdin_open: true
+    tty: true
+  
+
