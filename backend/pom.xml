@@ -9,14 +9,15 @@
         <version>2.2.5.RELEASE</version>
     </parent>
 
-    <groupId>com.hao</groupId>
+    <groupId>com.hao.confessionswall</groupId>
     <artifactId>backend</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <modules>
         <module>common</module>
-        <module>security</module>
+        <module>wall</module>
+        <module>image</module>
     </modules>
 
     <properties>
@@ -26,10 +27,6 @@
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
     <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-ui</artifactId>
