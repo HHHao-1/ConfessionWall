@@ -8,23 +8,21 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>wxwall-image</artifactId>
+    <artifactId>wxwall-eureka</artifactId>
     <packaging>jar</packaging>
+
     <dependencies>
         <dependency>
-            <groupId>com.hao.confessionswall</groupId>
-            <artifactId>wxwall-common</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-openfeign</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
+
     <build>
         <plugins>
             <plugin>

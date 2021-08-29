@@ -1,20 +1,30 @@
 server:
+  port: 8081
   servlet:
     context-path: /wxwall/image
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8080/wxwall/eureka/eureka/
+
 img:
   absoluteUrlWall: /Users/hao/Desktop/walltest/wall/
   absoluteUrlGoods: /Users/hao/Desktop/walltest/goods/
 #  absoluteUrl: /data/wxwall/image/
 mybatis:
-  type-aliases-package: com.hao.confessionswall.backend.common.model
+  type-aliases-package: com.hao.confessionswall.wxwall.common.model
   configuration:
     map-underscore-to-camel-case: true # 下划线转驼峰命名
     # 默认是一次把所有的数据全部查出后返回，容易造成OOM问题，设置fethSize既每次查出多少条数据，之后再查取下一批数据
     default-fetch-size: 100
     # sql执行超时时间（单位s）
     default-statement-timeout: 3000
-  mapperLocations: classpath:mapper/*.xml
+#  mapperLocations: classpath:mapper/*.xml
+
 spring:
+  application:
+    name: wxwall-image
   datasource:
     url: jdbc:mysql://127.0.0.1:882/wxwall?useUnicode=true&characterEncoding=utf-8&useSSL=false
     username: root

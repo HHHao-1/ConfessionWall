@@ -4,22 +4,30 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.hao.confessionswall</groupId>
-        <artifactId>backend</artifactId>
+        <artifactId>wxwall</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <groupId>com.hao.confessionswall.backend</groupId>
-    <artifactId>wall</artifactId>
+
+    <artifactId>wxwall-wall</artifactId>
     <packaging>jar</packaging>
     <dependencies>
         <dependency>
-            <groupId>com.hao.confessionswall.backend</groupId>
-            <artifactId>common</artifactId>
+            <groupId>com.hao.confessionswall</groupId>
+            <artifactId>wxwall-common</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>okhttp</artifactId>
             <version>4.7.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
     </dependencies>
     <build>

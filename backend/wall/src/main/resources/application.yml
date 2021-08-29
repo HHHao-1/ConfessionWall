@@ -1,106 +1,84 @@
 server:
+  port: 8082
   servlet:
     context-path: /wxwall/wall
-# wechat
 wx:
   appid:1
   secret:1
-# mybatis
-#mybatis:
-#  type-aliases-package: com.hao.wall.model
-#  configuration:
-#    map-underscore-to-camel-case: true # 下划线转驼峰命名
-#    # 默认是一次把所有的数据全部查出后返回，容易造成OOM问题，设置fethSize既每次查出多少条数据，之后再查取下一批数据
-#    default-fetch-size: 100
-#    # sql执行超时时间（单位s）
-#    default-statement-timeout: 3000
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8080/wxwall/eureka/eureka/
+
+mybatis:
+  type-aliases-package: com.hao.confessionswall.wxwall.common.model
+  configuration:
+    map-underscore-to-camel-case: true # 下划线转驼峰命名
+    # 默认是一次把所有的数据全部查出后返回，容易造成OOM问题，设置fethSize既每次查出多少条数据，之后再查取下一批数据
+    default-fetch-size: 100
+    # sql执行超时时间（单位s）
+    default-statement-timeout: 3000
 #  mapperLocations: classpath:mapper/*.xml
-# druid
+
 spring:
-#  rabbitmq:
-#    host: 127.0.0.1
-#    port: 881
-#    username: root
-#    password: root
-#    connection-timeout: 60s
-#    virtual-host: /
-#    #这个配置是保证提供者确保消息推送到交换机中，不管成不成功，都会回调
-#    publisher-confirm-type: correlated
-#    #保证交换机能把消息推送到队列中
-#    publisher-returns: true
-#    listener:
-#      type: direct
-#      direct:
-#        #这个配置是保证消费者会消费消息，手动确认
-#        acknowledge-mode: manual
-#        prefetch: 1 #限制每次发送一条数据
-#        consumers-per-queue: 10 #每个队列消费者数量
-#        auto-startup: true #消费者自动启动
-#        default-requeue-rejected: true #消费失败，自动重新入队
-#        #发送重试策略相关配置
-#        retry:
-#          enabled: true #是否支持重试
-#          max-attempts: 3
-#          stateless: true #重试是有状态的还是无状态，既对上次重试是否有感知
-#          multiplier: 1.0 #时间策略乘数因子
-#          initial-interval: 1000ms
-#          max-interval: 10000ms
-#  datasource:
-#    url: jdbc:mysql://127.0.0.1:882/wxwall?useUnicode=true&characterEncoding=utf-8&useSSL=false
-#    username: root
-#    password: root
-#    driver-class-name: com.mysql.cj.jdbc.Driver
-#    type: com.alibaba.druid.pool.DruidDataSource
-#    #Spring Boot 默认是不注入这些属性值的，需要通过DruidDataSource绑定
-#    #druid 数据源专有配置
-#    initial-size: 10
-#    #最小连接池数量
-#    min-idle: 10
-#    #最大连接池数量 maxIdle已经不再使用
-#    max-active: 100
-#    #获取连接时最大等待时间，单位毫秒
-#    max-wait: 60000
-#    #申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效。
-#    test-while-idle: true
-#    #既作为检测的间隔时间又作为testWhileIdel执行的依据
-#    time-between-eviction-runs-millis: 60000
-#    #销毁线程时检测当前连接的最后活动时间和当前时间差大于该值时，关闭当前连接
-#    min-evictable-idle-time-millis: 30000
-#    #用来检测连接是否有效的sql 必须是一个查询语句
-#    #mysql中为 select 'x'
-#    #oracle中为 select 1 from dual
-#    validation-query: select 'x'
-#    #申请连接时会执行validationQuery检测连接是否有效,开启会降低性能,默认为true
-#    test-on-borrow: false
-#    #归还连接时会执行validationQuery检测连接是否有效,开启会降低性能,默认为true
-#    test-on-return: false
-#    # 是否缓存preparedStatement
-#    pool-prepared-statements: true
-#    #   配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
-#    # 配置监拉统计挡成的filters. stat: 监控统计、Log4j:日志记录、waLL: 防御sqL注入
-#    # 如果启用日志记录时报错java.lang.ClassNotFoundException: org.apache.log4j.Priority，则导入Log4j依赖
-#    filters: stat,wall
-#    max-pool-prepared-statement-per-connection-size: 20
-#    use-global-data-source-stat: true
-#    # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
-#    connect-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
-#    # 配置监控服务器
-#    stat-view-servlet:
-#      # 1.1.10以后的版本需要指定为true 不然默认是关闭的就会出现404
-#      enabled: true
-#      login-username: admin
-#      login-password: admin
-#      reset-enable: false
-#      url-pattern: /druid/*
-#  redis:
-#    database: 0 # Redis 数据库索引（默认为 0）
-#    host: 127.0.0.1 # Redis 服务器地址
-#    port: 880 # Redis 服务器连接端口
-#    #    password: 123456 # Redis 服务器连接密码（默认为空）
-#    timeout: 5000  # 连接超时，单位ms
-#    lettuce:
-#      pool:
-#        max-active: 8 # 连接池最大连接数（使用负值表示没有限制） 默认 8
-#        max-wait: -1 # 连接池最大阻塞等待时间（使用负值表示没有限制） 默认 -1
-#        max-idle: 8 # 连接池中的最大空闲连接 默认 8
-#        min-idle: 0 # 连接池中的最小空闲连接 默认 0
+  application:
+    name: wxwall-wall
+  datasource:
+    url: jdbc:mysql://127.0.0.1:882/wxwall?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    #Spring Boot 默认是不注入这些属性值的，需要通过DruidDataSource绑定
+    #druid 数据源专有配置
+    initial-size: 10
+    #最小连接池数量
+    min-idle: 10
+    #最大连接池数量 maxIdle已经不再使用
+    max-active: 100
+    #获取连接时最大等待时间，单位毫秒
+    max-wait: 60000
+    #申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效。
+    test-while-idle: true
+    #既作为检测的间隔时间又作为testWhileIdel执行的依据
+    time-between-eviction-runs-millis: 60000
+    #销毁线程时检测当前连接的最后活动时间和当前时间差大于该值时，关闭当前连接
+    min-evictable-idle-time-millis: 30000
+    #用来检测连接是否有效的sql 必须是一个查询语句
+    #mysql中为 select 'x'
+    #oracle中为 select 1 from dual
+    validation-query: select 'x'
+    #申请连接时会执行validationQuery检测连接是否有效,开启会降低性能,默认为true
+    test-on-borrow: false
+    #归还连接时会执行validationQuery检测连接是否有效,开启会降低性能,默认为true
+    test-on-return: false
+    # 是否缓存preparedStatement
+    pool-prepared-statements: true
+    #   配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+    # 配置监拉统计挡成的filters. stat: 监控统计、Log4j:日志记录、waLL: 防御sqL注入
+    # 如果启用日志记录时报错java.lang.ClassNotFoundException: org.apache.log4j.Priority，则导入Log4j依赖
+    filters: stat,wall
+    max-pool-prepared-statement-per-connection-size: 20
+    use-global-data-source-stat: true
+    # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+    connect-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+    # 配置监控服务器
+    stat-view-servlet:
+      # 1.1.10以后的版本需要指定为true 不然默认是关闭的就会出现404
+      enabled: true
+      login-username: admin
+      login-password: admin
+      reset-enable: false
+      url-pattern: /druid/*
+  redis:
+    database: 0 # Redis 数据库索引（默认为 0）
+    host: 127.0.0.1 # Redis 服务器地址
+    port: 880 # Redis 服务器连接端口
+    #    password: 123456 # Redis 服务器连接密码（默认为空）
+    timeout: 5000  # 连接超时，单位ms
+    lettuce:
+      pool:
+        max-active: 8 # 连接池最大连接数（使用负值表示没有限制） 默认 8
+        max-wait: -1 # 连接池最大阻塞等待时间（使用负值表示没有限制） 默认 -1
+        max-idle: 8 # 连接池中的最大空闲连接 默认 8
+        min-idle: 0 # 连接池中的最小空闲连接 默认 0
